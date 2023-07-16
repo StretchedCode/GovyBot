@@ -1,3 +1,4 @@
 #Only for api key
-config
+config.py
 __pycache__/
+.idea
