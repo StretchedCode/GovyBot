@@ -2,6 +2,7 @@ import config, discord, api, asyncio, formatMessages
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.reactions = True
 
 client = discord.Client(intents=intents)
 
