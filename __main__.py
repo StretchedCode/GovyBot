@@ -34,7 +34,11 @@ async def on_message(message):
             data = api.getAnimeData(msg.content)
             embedMsg = formatMessages.createEmbed(data)
 
-            await message.channel.send(embed=embedMsg)
+            newMsg = await message.channel.send(embed=embedMsg)
+            await newMsg.add_reaction("❤️")
+@client.event
+async def on_reaction_add(reaction, user):
+    print(reaction, user, reaction.message.embeds[0].title)
         
         
 
