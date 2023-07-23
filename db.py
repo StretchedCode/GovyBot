@@ -53,6 +53,8 @@ def fetchList(user: str, guildname: str):
     data = testCursor.fetchall()
     print(data)
 
+    return data
+
 
 """
 
