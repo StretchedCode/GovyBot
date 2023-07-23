@@ -30,7 +30,7 @@ async def on_message(message):
         newMsg = await message.channel.send(embed=embedMsg)
         await newMsg.add_reaction("❤️")
     elif message.content.startswith('$list'):
-        print('test')
+        db.fetchList(message.author.name, message.guild.name)
 
 @client.event
 async def on_reaction_add(reaction, user):
