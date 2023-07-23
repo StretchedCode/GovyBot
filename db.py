@@ -51,10 +51,14 @@ def fetchList(user: str, guildname: str):
     testCursor.execute(f"""SELECT unnest(favourite_manga) FROM convicts WHERE user_name = '{user}' GROUP BY user_name, favourite_manga""")
     
     data = testCursor.fetchall()
+    testCursor.close()
     print(data)
 
     return data
 
+
+def fetchPopular(guildname: str):
+    testCursor = testDB.cursor()
 
 """
 
