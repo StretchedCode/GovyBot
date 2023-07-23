@@ -1,14 +1,17 @@
-import config, discord, api, asyncio, formatMessages
+import config, discord, api, asyncio, formatMessages, db
 
-intents = discord.Intents.default()
-intents.message_content = True
-intents.reactions = True
+intents = discord.Intents.all()
 
 client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
     print('Ready')
+    print(client.guilds)
+
+@client.event
+async def on_guild_join(guild):
+    print(str(guild))
 
 @client.event
 async def on_message(message):
@@ -17,28 +20,28 @@ async def on_message(message):
 
         await message.channel.send("Hello!")
 
-    elif message.content.startswith('$anime'):
+    elif message.content.startswith('$anime/'):
 
-        def id_check(m):
-            return len(m.content) >- 1
+        msgSummary = message.content.split("/")
 
-        await message.channel.send('Please enter the name of the anime you would like to search for: ')
-        
-        try:
-            msg = await client.wait_for('message', check=id_check, timeout=10.0)
-        except asyncio.TimeoutError:
-            await message.channel.send("Request failed")
-        else:
-            await message.channel.send(f"Request succeeded, {msg.author}")
+        data = api.getAnimeData(msgSummary[1])
+        embedMsg = formatMessages.createEmbed(data)
 
-            data = api.getAnimeData(msg.content)
-            embedMsg = formatMessages.createEmbed(data)
+        newMsg = await message.channel.send(embed=embedMsg)
+        await newMsg.add_reaction("❤️")
 
-            newMsg = await message.channel.send(embed=embedMsg)
-            await newMsg.add_reaction("❤️")
 @client.event
 async def on_reaction_add(reaction, user):
-    print(reaction, user, reaction.message.embeds[0].title)
+    if len(reaction.message.embeds) == 1:
+        testGuild = client.get_guild(916526515406118933)
+        db.insert(user.name, reaction.message.embeds[0].title, testGuild.name)
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    if len(reaction.message.embeds) == 1:
+        testGuild = client.get_guild(916526515406118933)
+        db.remove(user.name, reaction.message.embeds[0].title, testGuild.name)
+
         
         
 
