@@ -22,3 +22,15 @@ def createEmbed(data):
     newEmbed.set_author(name=materialString)
 
     return newEmbed
+
+def createPersonalList(data, user: str):
+
+    desc = ""
+    title = f"{user.name}'s favourite shows."
+    
+    for x in range(len(data)):
+        desc += f"{x}. {data[x]}\n"
+    
+    personalListEmbed = discord.Embed(title=title, color=discord.Colour.from_rgb(255,182,193), description=desc)
+
+    return personalListEmbed
