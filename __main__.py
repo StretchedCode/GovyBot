@@ -29,19 +29,17 @@ async def on_message(message):
 
         newMsg = await message.channel.send(embed=embedMsg)
         await newMsg.add_reaction("❤️")
+    elif message.content.startswith('$list'):
+        print('test')
 
 @client.event
 async def on_reaction_add(reaction, user):
-    if len(reaction.message.embeds) == 1:
+    if len(reaction.message.embeds) == 1 and reaction.message.channel.name == 'test':
         db.insert(user.name, reaction.message.embeds[0].title, reaction.message.guild.name)
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    if len(reaction.message.embeds) == 1:
+    if len(reaction.message.embeds) == 1 and reaction.message.channel.name == 'test':
         db.remove(user.name, reaction.message.embeds[0].title, reaction.message.guild.name)
-
-        
-        
-
 
 client.run(config.API_KEY)
