@@ -33,14 +33,12 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
     if len(reaction.message.embeds) == 1:
-        testGuild = client.get_guild(916526515406118933)
-        db.insert(user.name, reaction.message.embeds[0].title, testGuild.name)
+        db.insert(user.name, reaction.message.embeds[0].title, reaction.message.guild.name)
 
 @client.event
 async def on_reaction_remove(reaction, user):
     if len(reaction.message.embeds) == 1:
-        testGuild = client.get_guild(916526515406118933)
-        db.remove(user.name, reaction.message.embeds[0].title, testGuild.name)
+        db.remove(user.name, reaction.message.embeds[0].title, reaction.message.guild.name)
 
         
         
