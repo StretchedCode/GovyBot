@@ -60,6 +60,13 @@ def fetchList(user: str, guildname: str):
 def fetchPopular(guildname: str):
     testCursor = testDB.cursor()
 
+    testCursor.execute(f"""SELECT unnest(favourite_manga), count(*) FROM {guildname} GROUP BY unnest(favourite_manga) ORDER BY count(*) DESC;
+""")
+
+    data = testCursor.fetchall()
+
+    return data
+
 """
 
 Queries to be implemented
