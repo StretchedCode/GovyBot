@@ -29,8 +29,18 @@ async def on_message(message):
 
         newMsg = await message.channel.send(embed=embedMsg)
         await newMsg.add_reaction("❤️")
+
     elif message.content.startswith('$list'):
-        db.fetchList(message.author.name, message.guild.name)
+        content = db.fetchList(message.author.name, message.guild.name)
+        embedList = formatMessages.createList(content, message.author)
+
+        await message.channel.send(embed=embedList)
+
+    elif message.content.startswith('$popular'):
+        content = db.fetchPopular(message.guild.name)
+        embedList = formatMessages.createList(content, message.author, message.guild.name)
+
+        await message.channel.send(embed=embedList)
 
 @client.event
 async def on_reaction_add(reaction, user):
