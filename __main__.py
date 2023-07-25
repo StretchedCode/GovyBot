@@ -20,9 +20,9 @@ async def on_message(message):
 
         await message.channel.send("Hello!")
 
-    elif message.content.startswith('$anime/'):
+    elif message.content.startswith('$anime'):
 
-        msgSummary = message.content.split("/")
+        msgSummary = message.content.split("$anime")
 
         data = api.getAnimeData(msgSummary[1])
         embedMsg = formatMessages.createEmbed(data)
@@ -31,14 +31,37 @@ async def on_message(message):
         await newMsg.add_reaction("❤️")
 
     elif message.content.startswith('$list'):
-        content = db.fetchList(message.author.name, message.guild.name)
-        embedList = formatMessages.createList(content, message.author)
+
+        params = message.content.split(" ")
+        limit = 10
+        user = message.author.name
+        guild = message.guild.name
+        
+
+        for x in range(1, len(params) - 1):
+
+            if params[x] == '-u':
+                user = params[x + 1]
+            elif params[x] == '-l':
+                limit = int(params[x + 1])
+
+        content = db.fetchList(user=user, limit=limit, guildname=guild)
+
+        embedList = formatMessages.createList(data=content, user=user, limit=limit)
+        
 
         await message.channel.send(embed=embedList)
 
     elif message.content.startswith('$popular'):
-        content = db.fetchPopular(message.guild.name)
-        embedList = formatMessages.createList(content, message.author, message.guild.name)
+
+        params = message.content.split(" ")
+
+        if len(params) > 1:
+            content = db.fetchPopular(message.guild.name, limit=int(params[1]))
+            embedList = formatMessages.createList(data=content, user=message.author, guildname=message.guild.name, limit=int(params[1]))
+        else:
+            content = db.fetchPopular(message.guild.name)
+            embedList = formatMessages.createList(data=content, user=message.author, guildname=message.guild.name)
 
         await message.channel.send(embed=embedList)
 
