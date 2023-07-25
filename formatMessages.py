@@ -26,17 +26,21 @@ def createEmbed(data):
 def createList(data, user: str, guildname='', limit=10):
 
     desc = ""
+    colour = discord.Colour.from_rgb(100,100,100)
 
     if guildname == '':
-        title = f"{user.name}'s top {limit} favourite shows."
-        discord.Colour.from_rgb(255,212,193)
+        title = f"{user}'s top {limit} favourite shows."
+        colour = discord.Colour.from_rgb(255,142,243)
+        for x in range(len(data)):
+            desc += f"{x}. {data[x][0]}\n"
     else:
         title = f"{guildname}'s top {limit} favourite shows."
         colour = discord.Colour.from_rgb(255,182,193)
+        for x in range(len(data)):
+            desc += f"{x}. {data[x][0]}  ({data[x][1]})\n"
     
-    for x in range(limit):
-        desc += f"{x}. {data[x][0]}\n"
     
-    personalListEmbed = discord.Embed(title=title, color=discord.Colour.from_rgb(255,182,193), description=desc)
+    
+    personalListEmbed = discord.Embed(title=title, color=colour, description=desc)
 
     return personalListEmbed
