@@ -44,11 +44,10 @@ def remove(user: str, manga: str, guildname:str):
 """)
     testCursor.close()
 
-
-def fetchList(user: str, guildname: str):
+def fetchList(user: str, guildname: str, limit=10):
     testCursor = testDB.cursor()
 
-    testCursor.execute(f"""SELECT unnest(favourite_manga) FROM convicts WHERE user_name = '{user}' GROUP BY user_name, favourite_manga""")
+    testCursor.execute(f"""SELECT unnest(favourite_manga) FROM {guildname} WHERE user_name = '{user}' GROUP BY user_name, favourite_manga LIMIT {limit}""")
     
     data = testCursor.fetchall()
     testCursor.close()
@@ -57,10 +56,10 @@ def fetchList(user: str, guildname: str):
     return data
 
 
-def fetchPopular(guildname: str):
+def fetchPopular(guildname: str, limit=10):
     testCursor = testDB.cursor()
 
-    testCursor.execute(f"""SELECT unnest(favourite_manga), count(*) FROM {guildname} GROUP BY unnest(favourite_manga) ORDER BY count(*) DESC;
+    testCursor.execute(f"""SELECT unnest(favourite_manga), count(*) FROM {guildname} GROUP BY unnest(favourite_manga) ORDER BY count(*) DESC LIMIT {limit};
 """)
 
     data = testCursor.fetchall()
@@ -71,8 +70,8 @@ def fetchPopular(guildname: str):
 
 Queries to be implemented
 
-SELECT unnest(favourite_manga), count(*) FROM convicts GROUP BY unnest(favourite_manga) ORDER BY count(*) DESC;
+SELECT unnest(favourite_manga), count(*) FROM convicts GROUP BY unnest(favourite_manga) ORDER BY count(*) DESC; (COMPLETED)
 
-SELECT user_name, unnest(favourite_manga) FROM convicts WHERE user_name = 'stretched.' GROUP BY user_name, favourite_manga;
+SELECT user_name, unnest(favourite_manga) FROM convicts WHERE user_name = 'stretched.' GROUP BY user_name, favourite_manga; (COMPLETED)
 
 """
