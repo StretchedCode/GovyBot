@@ -1,4 +1,4 @@
-# discordBot
+# GovyBot
 
 <h1>Welcome to Govy Bot.</h1>
 
